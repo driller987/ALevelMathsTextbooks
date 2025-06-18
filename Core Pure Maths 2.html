@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Core Pure Maths 2</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: white;
+      overflow-x: hidden;
+      touch-action: pan-y;
+    }
+    .slider-wrapper {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+    .slider {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .slide {
+      min-width: 100%;
+      display: flex;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .single-page {
+      justify-content: center;
+      background-color: white;
+    }
+    .single-page img {
+      width: auto;
+      max-width: 95%;
+      height: 100vh;
+      object-fit: contain;
+    }
+    .two-page-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      gap: 0;
+      background-color: white;
+    }
+    .two-page {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+    .two-page img {
+      width: auto;
+      height: 100vh;
+      object-fit: contain;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-btn {
+      position: fixed;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: none;
+      padding: 30px 15px;
+      cursor: pointer;
+      font-size: 24px;
+      transition: all 0.3s ease;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .prev-btn {
+      left: 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .next-btn {
+      right: 0;
+      border-radius: 8px 0 0 8px;
+    }
+    .nav-btn:hover {
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+    .page-nav-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      z-index: 100;
+      width: 110px;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    .page-nav-btn:hover {
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+    .page-nav-menu {
+      position: fixed;
+      bottom: 60px;
+      right: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 10px 5px;
+      max-height: 30vh;
+      overflow-y: auto;
+      display: none;
+      z-index: 100;
+      width: 100px; 
+    }
+    .page-nav-menu.show {
+      display: block;
+    }
+    .page-nav-item {
+      padding: 5px 0;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+      font-size: 14px;
+    }
+    .page-nav-item:hover {
+      background-color: #f5f5f5;
+    }
+    .page-nav-item:last-child {
+      border-bottom: none;
+    }
+    
+    /* Mobile-specific styles */
+    @media (max-width: 1024px) {
+      .two-page-container {
+        display: none !important;
+      }
+      .mobile-single-page {
+        display: flex !important;
+      }
+      .desktop-slide {
+        display: none !important;
+      }
+      .nav-btn {
+        padding: 20px 10px;
+        font-size: 20px;
+        height: 80px;
+      }
+    }
+    
+    /* Desktop-specific styles */
+    @media (min-width: 1025px) {
+      .mobile-single-page {
+        display: none !important;
+      }
+      .desktop-slide {
+        display: flex !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="slider-wrapper">
+  <button class="nav-btn prev-btn" onclick="moveSlide(-1)">❮</button>
+  <div class="slider">
+    <div class="slides">
+      <!-- First page (always single) -->
+      <div class="slide single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-001.jpg" alt="Image 1">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-002.jpg" alt="Image 2">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-003.jpg" alt="Image 3">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-002.jpg" alt="Image 2" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-003.jpg" alt="Image 3" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-004.jpg" alt="Image 4">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-005.jpg" alt="Image 5">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-004.jpg" alt="Image 4" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-005.jpg" alt="Image 5" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-006.jpg" alt="Image 6">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-007.jpg" alt="Image 7">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-006.jpg" alt="Image 6" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-007.jpg" alt="Image 7" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-008.jpg" alt="Image 8">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-009.jpg" alt="Image 9">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-008.jpg" alt="Image 8" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-009.jpg" alt="Image 9" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-010.jpg" alt="Image 10">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-011.jpg" alt="Image 11">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-010.jpg" alt="Image 10" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-011.jpg" alt="Image 11" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-012.jpg" alt="Image 12">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-013.jpg" alt="Image 13">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-012.jpg" alt="Image 12" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-013.jpg" alt="Image 13" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-014.jpg" alt="Image 14">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-015.jpg" alt="Image 15">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-014.jpg" alt="Image 14" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-015.jpg" alt="Image 15" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-016.jpg" alt="Image 16">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-017.jpg" alt="Image 17">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-016.jpg" alt="Image 16" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-017.jpg" alt="Image 17" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-018.jpg" alt="Image 18">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-019.jpg" alt="Image 19">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-018.jpg" alt="Image 18" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-019.jpg" alt="Image 19" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-020.jpg" alt="Image 20">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-021.jpg" alt="Image 21">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-020.jpg" alt="Image 20" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-021.jpg" alt="Image 21" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-022.jpg" alt="Image 22">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-023.jpg" alt="Image 23">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-022.jpg" alt="Image 22" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-023.jpg" alt="Image 23" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-024.jpg" alt="Image 24">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-025.jpg" alt="Image 25">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-024.jpg" alt="Image 24" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-025.jpg" alt="Image 25" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-026.jpg" alt="Image 26">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-027.jpg" alt="Image 27">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-026.jpg" alt="Image 26" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-027.jpg" alt="Image 27" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-028.jpg" alt="Image 28">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-029.jpg" alt="Image 29">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-028.jpg" alt="Image 28" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-029.jpg" alt="Image 29" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-030.jpg" alt="Image 30">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-031.jpg" alt="Image 31">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-030.jpg" alt="Image 30" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-031.jpg" alt="Image 31" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-032.jpg" alt="Image 32">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-033.jpg" alt="Image 33">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-032.jpg" alt="Image 32" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-033.jpg" alt="Image 33" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-034.jpg" alt="Image 34">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-035.jpg" alt="Image 35">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-034.jpg" alt="Image 34" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-035.jpg" alt="Image 35" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-036.jpg" alt="Image 36">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-037.jpg" alt="Image 37">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-036.jpg" alt="Image 36" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-037.jpg" alt="Image 37" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-038.jpg" alt="Image 38">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-039.jpg" alt="Image 39">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-038.jpg" alt="Image 38" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-039.jpg" alt="Image 39" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-040.jpg" alt="Image 40">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-041.jpg" alt="Image 41">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-040.jpg" alt="Image 40" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-041.jpg" alt="Image 41" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-042.jpg" alt="Image 42">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-043.jpg" alt="Image 43">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-042.jpg" alt="Image 42" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-043.jpg" alt="Image 43" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-044.jpg" alt="Image 44">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-045.jpg" alt="Image 45">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-044.jpg" alt="Image 44" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-045.jpg" alt="Image 45" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-046.jpg" alt="Image 46">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-047.jpg" alt="Image 47">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-046.jpg" alt="Image 46" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-047.jpg" alt="Image 47" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-048.jpg" alt="Image 48">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-049.jpg" alt="Image 49">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-048.jpg" alt="Image 48" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-049.jpg" alt="Image 49" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-050.jpg" alt="Image 50">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-051.jpg" alt="Image 51">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-050.jpg" alt="Image 50" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-051.jpg" alt="Image 51" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-052.jpg" alt="Image 52">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-053.jpg" alt="Image 53">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-052.jpg" alt="Image 52" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-053.jpg" alt="Image 53" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-054.jpg" alt="Image 54">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-055.jpg" alt="Image 55">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-054.jpg" alt="Image 54" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-055.jpg" alt="Image 55" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-056.jpg" alt="Image 56">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-057.jpg" alt="Image 57">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-056.jpg" alt="Image 56" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-057.jpg" alt="Image 57" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-058.jpg" alt="Image 58">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-059.jpg" alt="Image 59">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-058.jpg" alt="Image 58" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-059.jpg" alt="Image 59" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-060.jpg" alt="Image 60">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-061.jpg" alt="Image 61">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-060.jpg" alt="Image 60" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-061.jpg" alt="Image 61" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-062.jpg" alt="Image 62">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-063.jpg" alt="Image 63">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-062.jpg" alt="Image 62" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-063.jpg" alt="Image 63" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-064.jpg" alt="Image 64">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-065.jpg" alt="Image 65">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-064.jpg" alt="Image 64" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-065.jpg" alt="Image 65" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-066.jpg" alt="Image 66">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-067.jpg" alt="Image 67">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-066.jpg" alt="Image 66" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-067.jpg" alt="Image 67" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-068.jpg" alt="Image 68">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-069.jpg" alt="Image 69">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-068.jpg" alt="Image 68" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-069.jpg" alt="Image 69" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-070.jpg" alt="Image 70">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-071.jpg" alt="Image 71">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-070.jpg" alt="Image 70" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-071.jpg" alt="Image 71" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-072.jpg" alt="Image 72">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-073.jpg" alt="Image 73">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-072.jpg" alt="Image 72" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-073.jpg" alt="Image 73" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-074.jpg" alt="Image 74">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-075.jpg" alt="Image 75">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-074.jpg" alt="Image 74" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-075.jpg" alt="Image 75" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-076.jpg" alt="Image 76">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-077.jpg" alt="Image 77">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-076.jpg" alt="Image 76" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-077.jpg" alt="Image 77" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-078.jpg" alt="Image 78">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-079.jpg" alt="Image 79">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-078.jpg" alt="Image 78" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-079.jpg" alt="Image 79" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-080.jpg" alt="Image 80">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-081.jpg" alt="Image 81">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-080.jpg" alt="Image 80" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-081.jpg" alt="Image 81" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-082.jpg" alt="Image 82">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-083.jpg" alt="Image 83">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-082.jpg" alt="Image 82" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-083.jpg" alt="Image 83" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-084.jpg" alt="Image 84">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-085.jpg" alt="Image 85">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-084.jpg" alt="Image 84" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-085.jpg" alt="Image 85" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-086.jpg" alt="Image 86">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-087.jpg" alt="Image 87">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-086.jpg" alt="Image 86" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-087.jpg" alt="Image 87" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-088.jpg" alt="Image 88">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-089.jpg" alt="Image 89">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-088.jpg" alt="Image 88" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-089.jpg" alt="Image 89" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-090.jpg" alt="Image 90">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-091.jpg" alt="Image 91">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-090.jpg" alt="Image 90" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-091.jpg" alt="Image 91" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-092.jpg" alt="Image 92">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-093.jpg" alt="Image 93">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-092.jpg" alt="Image 92" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-093.jpg" alt="Image 93" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-094.jpg" alt="Image 94">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-095.jpg" alt="Image 95">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-094.jpg" alt="Image 94" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-095.jpg" alt="Image 95" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-096.jpg" alt="Image 96">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-097.jpg" alt="Image 97">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-096.jpg" alt="Image 96" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-097.jpg" alt="Image 97" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-098.jpg" alt="Image 98">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-099.jpg" alt="Image 99">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-098.jpg" alt="Image 98" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-099.jpg" alt="Image 99" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-100.jpg" alt="Image 100">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-101.jpg" alt="Image 101">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-100.jpg" alt="Image 100" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-101.jpg" alt="Image 101" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-102.jpg" alt="Image 102">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-103.jpg" alt="Image 103">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-102.jpg" alt="Image 102" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-103.jpg" alt="Image 103" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-104.jpg" alt="Image 104">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-105.jpg" alt="Image 105">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-104.jpg" alt="Image 104" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-105.jpg" alt="Image 105" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-106.jpg" alt="Image 106">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-107.jpg" alt="Image 107">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-106.jpg" alt="Image 106" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-107.jpg" alt="Image 107" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-108.jpg" alt="Image 108">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-109.jpg" alt="Image 109">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-108.jpg" alt="Image 108" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-109.jpg" alt="Image 109" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-110.jpg" alt="Image 110">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-111.jpg" alt="Image 111">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-110.jpg" alt="Image 110" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-111.jpg" alt="Image 111" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-112.jpg" alt="Image 112">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-113.jpg" alt="Image 113">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-112.jpg" alt="Image 112" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-113.jpg" alt="Image 113" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-114.jpg" alt="Image 114">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-115.jpg" alt="Image 115">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-114.jpg" alt="Image 114" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-115.jpg" alt="Image 115" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-116.jpg" alt="Image 116">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-117.jpg" alt="Image 117">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-116.jpg" alt="Image 116" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-117.jpg" alt="Image 117" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-118.jpg" alt="Image 118">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-119.jpg" alt="Image 119">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-118.jpg" alt="Image 118" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-119.jpg" alt="Image 119" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-120.jpg" alt="Image 120">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-121.jpg" alt="Image 121">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-120.jpg" alt="Image 120" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-121.jpg" alt="Image 121" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-122.jpg" alt="Image 122">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-123.jpg" alt="Image 123">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-122.jpg" alt="Image 122" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-123.jpg" alt="Image 123" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-124.jpg" alt="Image 124">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-125.jpg" alt="Image 125">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-124.jpg" alt="Image 124" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-125.jpg" alt="Image 125" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-126.jpg" alt="Image 126">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-127.jpg" alt="Image 127">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-126.jpg" alt="Image 126" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-127.jpg" alt="Image 127" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-128.jpg" alt="Image 128">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-129.jpg" alt="Image 129">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-128.jpg" alt="Image 128" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-129.jpg" alt="Image 129" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-130.jpg" alt="Image 130">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-131.jpg" alt="Image 131">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-130.jpg" alt="Image 130" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-131.jpg" alt="Image 131" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-132.jpg" alt="Image 132">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-133.jpg" alt="Image 133">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-132.jpg" alt="Image 132" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-133.jpg" alt="Image 133" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-134.jpg" alt="Image 134">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-135.jpg" alt="Image 135">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-134.jpg" alt="Image 134" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-135.jpg" alt="Image 135" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-136.jpg" alt="Image 136">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-137.jpg" alt="Image 137">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-136.jpg" alt="Image 136" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-137.jpg" alt="Image 137" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-138.jpg" alt="Image 138">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-139.jpg" alt="Image 139">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-138.jpg" alt="Image 138" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-139.jpg" alt="Image 139" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-140.jpg" alt="Image 140">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-141.jpg" alt="Image 141">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-140.jpg" alt="Image 140" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-141.jpg" alt="Image 141" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-142.jpg" alt="Image 142">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-143.jpg" alt="Image 143">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-142.jpg" alt="Image 142" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-143.jpg" alt="Image 143" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-144.jpg" alt="Image 144">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-145.jpg" alt="Image 145">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-144.jpg" alt="Image 144" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-145.jpg" alt="Image 145" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-146.jpg" alt="Image 146">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-147.jpg" alt="Image 147">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-146.jpg" alt="Image 146" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-147.jpg" alt="Image 147" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-148.jpg" alt="Image 148">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-149.jpg" alt="Image 149">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-148.jpg" alt="Image 148" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-149.jpg" alt="Image 149" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-150.jpg" alt="Image 150">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-151.jpg" alt="Image 151">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-150.jpg" alt="Image 150" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-151.jpg" alt="Image 151" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-152.jpg" alt="Image 152">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-153.jpg" alt="Image 153">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-152.jpg" alt="Image 152" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-153.jpg" alt="Image 153" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-154.jpg" alt="Image 154">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-155.jpg" alt="Image 155">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-154.jpg" alt="Image 154" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-155.jpg" alt="Image 155" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-156.jpg" alt="Image 156">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-157.jpg" alt="Image 157">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-156.jpg" alt="Image 156" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-157.jpg" alt="Image 157" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-158.jpg" alt="Image 158">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-159.jpg" alt="Image 159">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-158.jpg" alt="Image 158" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-159.jpg" alt="Image 159" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-160.jpg" alt="Image 160">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-161.jpg" alt="Image 161">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-160.jpg" alt="Image 160" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-161.jpg" alt="Image 161" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-162.jpg" alt="Image 162">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-163.jpg" alt="Image 163">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-162.jpg" alt="Image 162" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-163.jpg" alt="Image 163" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-164.jpg" alt="Image 164">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-165.jpg" alt="Image 165">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-164.jpg" alt="Image 164" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-165.jpg" alt="Image 165" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-166.jpg" alt="Image 166">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-167.jpg" alt="Image 167">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-166.jpg" alt="Image 166" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-167.jpg" alt="Image 167" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-168.jpg" alt="Image 168">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-169.jpg" alt="Image 169">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-168.jpg" alt="Image 168" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-169.jpg" alt="Image 169" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-170.jpg" alt="Image 170">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-171.jpg" alt="Image 171">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-170.jpg" alt="Image 170" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-171.jpg" alt="Image 171" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-172.jpg" alt="Image 172">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-173.jpg" alt="Image 173">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-172.jpg" alt="Image 172" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-173.jpg" alt="Image 173" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-174.jpg" alt="Image 174">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-175.jpg" alt="Image 175">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-174.jpg" alt="Image 174" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-175.jpg" alt="Image 175" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-176.jpg" alt="Image 176">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-177.jpg" alt="Image 177">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-176.jpg" alt="Image 176" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-177.jpg" alt="Image 177" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-178.jpg" alt="Image 178">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-179.jpg" alt="Image 179">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-178.jpg" alt="Image 178" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-179.jpg" alt="Image 179" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-180.jpg" alt="Image 180">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-181.jpg" alt="Image 181">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-180.jpg" alt="Image 180" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-181.jpg" alt="Image 181" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-182.jpg" alt="Image 182">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-183.jpg" alt="Image 183">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-182.jpg" alt="Image 182" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-183.jpg" alt="Image 183" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-184.jpg" alt="Image 184">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-185.jpg" alt="Image 185">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-184.jpg" alt="Image 184" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-185.jpg" alt="Image 185" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-186.jpg" alt="Image 186">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-187.jpg" alt="Image 187">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-186.jpg" alt="Image 186" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-187.jpg" alt="Image 187" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-188.jpg" alt="Image 188">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-189.jpg" alt="Image 189">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-188.jpg" alt="Image 188" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-189.jpg" alt="Image 189" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-190.jpg" alt="Image 190">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-191.jpg" alt="Image 191">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-190.jpg" alt="Image 190" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-191.jpg" alt="Image 191" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-192.jpg" alt="Image 192">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-193.jpg" alt="Image 193">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-192.jpg" alt="Image 192" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-193.jpg" alt="Image 193" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-194.jpg" alt="Image 194">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-195.jpg" alt="Image 195">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-194.jpg" alt="Image 194" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-195.jpg" alt="Image 195" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-196.jpg" alt="Image 196">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-197.jpg" alt="Image 197">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-196.jpg" alt="Image 196" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-197.jpg" alt="Image 197" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-198.jpg" alt="Image 198">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-199.jpg" alt="Image 199">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-198.jpg" alt="Image 198" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-199.jpg" alt="Image 199" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-200.jpg" alt="Image 200">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-201.jpg" alt="Image 201">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-200.jpg" alt="Image 200" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-201.jpg" alt="Image 201" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-202.jpg" alt="Image 202">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-203.jpg" alt="Image 203">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-202.jpg" alt="Image 202" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-203.jpg" alt="Image 203" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-204.jpg" alt="Image 204">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-205.jpg" alt="Image 205">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-204.jpg" alt="Image 204" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-205.jpg" alt="Image 205" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-206.jpg" alt="Image 206">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-207.jpg" alt="Image 207">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-206.jpg" alt="Image 206" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-207.jpg" alt="Image 207" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-208.jpg" alt="Image 208">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-209.jpg" alt="Image 209">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-208.jpg" alt="Image 208" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-209.jpg" alt="Image 209" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-210.jpg" alt="Image 210">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-211.jpg" alt="Image 211">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-210.jpg" alt="Image 210" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-211.jpg" alt="Image 211" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-212.jpg" alt="Image 212">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-213.jpg" alt="Image 213">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-212.jpg" alt="Image 212" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-213.jpg" alt="Image 213" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-214.jpg" alt="Image 214">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-215.jpg" alt="Image 215">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-214.jpg" alt="Image 214" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-215.jpg" alt="Image 215" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-216.jpg" alt="Image 216">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-217.jpg" alt="Image 217">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-216.jpg" alt="Image 216" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-217.jpg" alt="Image 217" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-218.jpg" alt="Image 218">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-219.jpg" alt="Image 219">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-218.jpg" alt="Image 218" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-219.jpg" alt="Image 219" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-220.jpg" alt="Image 220">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-221.jpg" alt="Image 221">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-220.jpg" alt="Image 220" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-221.jpg" alt="Image 221" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-222.jpg" alt="Image 222">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-223.jpg" alt="Image 223">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-222.jpg" alt="Image 222" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-223.jpg" alt="Image 223" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-224.jpg" alt="Image 224">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-225.jpg" alt="Image 225">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-224.jpg" alt="Image 224" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-225.jpg" alt="Image 225" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-226.jpg" alt="Image 226">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-227.jpg" alt="Image 227">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-226.jpg" alt="Image 226" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-227.jpg" alt="Image 227" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-228.jpg" alt="Image 228">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-229.jpg" alt="Image 229">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-228.jpg" alt="Image 228" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-229.jpg" alt="Image 229" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-230.jpg" alt="Image 230">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-231.jpg" alt="Image 231">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-230.jpg" alt="Image 230" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-231.jpg" alt="Image 231" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-232.jpg" alt="Image 232">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-233.jpg" alt="Image 233">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-232.jpg" alt="Image 232" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-233.jpg" alt="Image 233" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-234.jpg" alt="Image 234">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-235.jpg" alt="Image 235">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-234.jpg" alt="Image 234" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-235.jpg" alt="Image 235" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-236.jpg" alt="Image 236">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-237.jpg" alt="Image 237">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-236.jpg" alt="Image 236" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-237.jpg" alt="Image 237" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-238.jpg" alt="Image 238">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-239.jpg" alt="Image 239">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-238.jpg" alt="Image 238" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-239.jpg" alt="Image 239" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-240.jpg" alt="Image 240">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-241.jpg" alt="Image 241">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-240.jpg" alt="Image 240" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-241.jpg" alt="Image 241" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-242.jpg" alt="Image 242">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-243.jpg" alt="Image 243">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-242.jpg" alt="Image 242" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-243.jpg" alt="Image 243" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-244.jpg" alt="Image 244">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-245.jpg" alt="Image 245">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-244.jpg" alt="Image 244" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-245.jpg" alt="Image 245" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-246.jpg" alt="Image 246">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-247.jpg" alt="Image 247">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-246.jpg" alt="Image 246" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-247.jpg" alt="Image 247" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-248.jpg" alt="Image 248">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-249.jpg" alt="Image 249">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-248.jpg" alt="Image 248" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-249.jpg" alt="Image 249" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-250.jpg" alt="Image 250">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-251.jpg" alt="Image 251">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-250.jpg" alt="Image 250" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-251.jpg" alt="Image 251" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-252.jpg" alt="Image 252">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-253.jpg" alt="Image 253">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-252.jpg" alt="Image 252" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-253.jpg" alt="Image 253" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-254.jpg" alt="Image 254">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-255.jpg" alt="Image 255">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-254.jpg" alt="Image 254" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-255.jpg" alt="Image 255" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-256.jpg" alt="Image 256">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-257.jpg" alt="Image 257">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-256.jpg" alt="Image 256" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-257.jpg" alt="Image 257" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-258.jpg" alt="Image 258">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-259.jpg" alt="Image 259">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-258.jpg" alt="Image 258" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-259.jpg" alt="Image 259" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-260.jpg" alt="Image 260">
+          </div>
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-261.jpg" alt="Image 261">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-260.jpg" alt="Image 260" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-261.jpg" alt="Image 261" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+      <div class="slide desktop-slide">
+        <div class="two-page-container">
+          <div class="two-page">
+            <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-262.jpg" alt="Image 262">
+          </div>
+        </div>
+      </div>
+      <div class="slide mobile-single-page">
+        <img src="https://www.pearsonactivelearn.com/r00/r0070/r007037/r00703741/current/OPS/images/combinepdf-262.jpg" alt="Image 262" style="max-width:95%;height:95vh;object-fit:contain;">
+      </div>
+    
+    </div>
+  </div>
+  <button class="nav-btn next-btn" onclick="moveSlide(1)">❯</button>
+</div>
+
+<button class="page-nav-btn" onclick="togglePageNav()">Go To</button>
+<div class="page-nav-menu" id="pageNavMenu"></div>
+
+<script>
+  let currentIndex = 0;
+  const slides = document.querySelector('.slides');
+  let totalSlides;
+  const pageNavMenu = document.getElementById('pageNavMenu');
+  let isMobileView = window.innerWidth <= 1024;
+
+  // Calculate total slides based on device type
+  function calculateTotalSlides() {
+    if (isMobileView) {
+      totalSlides = document.querySelectorAll('.slide.single-page, .slide.mobile-single-page').length;
+    } else {
+      totalSlides = document.querySelectorAll('.slide.single-page, .slide.desktop-slide').length;
+    }
+  }
+
+  // Generate page navigation menu
+  function generatePageNav() {
+    let html = '';
+    if (isMobileView) {
+      html += '<div class="page-nav-item" onclick="goToPage(0)">Title</div>';
+      html += '<div class="page-nav-item" onclick="goToPage(1)">ii</div>';
+      html += '<div class="page-nav-item" onclick="goToPage(2)">iii</div>';
+      html += '<div class="page-nav-item" onclick="goToPage(3)">iv</div>';
+      html += '<div class="page-nav-item" onclick="goToPage(4)">v</div>';
+      html += '<div class="page-nav-item" onclick="goToPage(5)">vi</div>';
+      for (let i = 6; i < totalSlides; i++) {
+        html += `<div class="page-nav-item" onclick="goToPage(${i})">${i-5}</div>`;
+      }
+    } else {
+      html += '<div class="page-nav-item" onclick="goToPage(0)">Title</div>';
+      html += '<div class="page-nav-item" onclick="goToPage(1)">ii-iii</div>';
+      html += '<div class="page-nav-item" onclick="goToPage(2)">iv-v</div>';
+      html += '<div class="page-nav-item" onclick="goToPage(3)">vi-1</div>';
+      for (let i = 4; i < totalSlides; i++) {
+        const page1 = (i-3)*2;
+        const page2 = page1 + 1;
+        html += `<div class="page-nav-item" onclick="goToPage(${i})">${page1}-${page2}</div>`;
+      }
+    }
+    pageNavMenu.innerHTML = html;
+  }
+
+  // Toggle page navigation menu visibility
+  function togglePageNav() {
+    calculateTotalSlides();
+    if (!pageNavMenu.innerHTML) generatePageNav();
+    pageNavMenu.classList.toggle('show');
+  }
+
+  function goToPage(index) {
+    currentIndex = index;
+    slides.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+    pageNavMenu.classList.remove('show');
+  }
+
+  function moveSlide(direction) {
+    calculateTotalSlides();
+    currentIndex = (currentIndex + direction + totalSlides) % totalSlides;
+    slides.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+  }
+
+  // Adjust index for resizing
+  function adjustIndexForResize() {
+    if (isMobileView) {
+      currentIndex = currentIndex * 2 - 1;
+    } else {
+      currentIndex = Math.floor(currentIndex / 2) + (currentIndex % 2);
+    }
+    currentIndex = Math.max(0, Math.min(currentIndex, totalSlides - 1));
+    slides.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+  }
+
+  window.addEventListener('resize', function() {
+    const wasMobileView = isMobileView;
+    isMobileView = window.innerWidth <= 1024;
+
+    if (wasMobileView !== isMobileView) {
+      calculateTotalSlides();
+      adjustIndexForResize();
+      generatePageNav();
+    }
+  });
+
+  // Keyboard arrow navigation
+  window.addEventListener('keydown', function(event) {
+    if (event.key === 'ArrowLeft') {
+      moveSlide(-1);  // Move to the previous slide
+    } else if (event.key === 'ArrowRight') {
+      moveSlide(1);  // Move to the next slide
+    }
+  });
+
+  // Initialize
+  calculateTotalSlides();
+  generatePageNav();
+</script>
+
+</body>
+</html>
